@@ -17,18 +17,17 @@ namespace UrlLib
     class WebSocket::WSImpl : public WSImplBase
     {
     public:
-
-        void Close()
-        {
-            close_callback();
-        }
         
         void Send(std::string message)
         {
             if (m_readyState == ReadyState::Closed ||
                 m_readyState == ReadyState::Closing ||
                 m_readyState == ReadyState::Connecting)
-                return;
+            {
+                error_callback();
+
+                throw std::runtime_error{"WebSocket is not Open"};
+            }
 
             try
             {
@@ -39,7 +38,6 @@ namespace UrlLib
                 arcana::create_task<std::exception_ptr>(dataWriter.StoreAsync())
                     .then(arcana::inline_scheduler, arcana::cancellation::none(), [this, dataWriter](int)
                         {
-                            // CLEANUP
                             dataWriter.DetachStream();
                         });
             }
@@ -62,6 +60,8 @@ namespace UrlLib
 
             m_url = url;
 
+            m_readyState = ReadyState::Connecting;
+
             m_webSocket.Control().MessageType(Windows::Networking::Sockets::SocketMessageType::Utf8);
 
             m_messageReceivedEventToken = m_webSocket.MessageReceived({this, &WebSocket::WSImpl::OnMessageReceived});
@@ -71,7 +71,6 @@ namespace UrlLib
             {
                 // INITIALIZE SOCKET
                 hstring hURL = to_hstring(m_url);
-                m_readyState = ReadyState::Connecting;
 
                 arcana::create_task<std::exception_ptr>(m_webSocket.ConnectAsync(Windows::Foundation::Uri{hURL}))
                     .then(arcana::inline_scheduler, arcana::cancellation::none(), [this]()
@@ -87,6 +86,25 @@ namespace UrlLib
             }
         }
 
+        void Close()
+        {
+            if (m_readyState == ReadyState::Closing ||
+                m_readyState == ReadyState::Closed)
+            {
+                error_callback();
+
+                throw std::runtime_error{"WebSocket is already Closing/Closed"};
+            }
+
+            m_readyState = ReadyState::Closing;
+
+            m_webSocket.Close();
+
+            m_readyState = ReadyState::Closed;
+
+            close_callback();
+        }
+
     private:
         void OnWebSocketClosed(Windows::Networking::Sockets::IWebSocket const& /* sender */, Windows::Networking::Sockets::WebSocketClosedEventArgs const& args)
         {
@@ -97,7 +115,11 @@ namespace UrlLib
         {
             if (m_readyState == ReadyState::Closed ||
                 m_readyState == ReadyState::Closing)
-                return;
+            {
+                error_callback();
+
+                throw std::runtime_error{"WebSocket is Closing/Closed"};
+            }
 
             try
             {
