@@ -33,6 +33,18 @@ if(ANDROID AND NOT TARGET AndroidExtensions)
     message(STATUS "Fetching AndroidExtensions - done")
 endif()
 
+if(NOT websocketpp_POPULATED)
+
+    FetchContent_Declare(
+        websocketpp
+        GIT_REPOSITORY https://github.com/zaphoyd/websocketpp.git
+        GIT_TAG        origin/master)
+
+    message(STATUS "Fetching WebSocket++")
+    FetchContent_MakeAvailable(websocketpp)
+    message(STATUS "Fetching WebSocket++ - done")
+endif()
+
 if(ANDROID)
     set(ADDITIONAL_SOURCES
         "Source/UrlRequest_Android.cpp"
