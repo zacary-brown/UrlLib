@@ -52,6 +52,7 @@ if(ANDROID)
     set(ADDITIONAL_LIBRARIES
         PRIVATE android
         PRIVATE AndroidExtensions
+        PRIVATE websocketpp
         PRIVATE log)
 elseif(APPLE)
     set(ADDITIONAL_SOURCES
