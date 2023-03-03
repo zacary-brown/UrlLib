@@ -2,6 +2,8 @@
 
 #include <arcana/threading/task_conversions.h>
 
+#include <websocketpp/client.hpp>
+
 #include <iostream>
 
 namespace UrlLib
@@ -27,7 +29,7 @@ namespace UrlLib
                 // SEND MESSAGE
                 
             }
-            catch (winrt::hresult_error const& )
+            catch (std::runtime_error const& )
             {
                 error_callback();
             }
@@ -52,7 +54,7 @@ namespace UrlLib
             {
                 // INITIALIZE SOCKET
             }
-            catch (hresult_error const& )
+            catch (std::runtime_error const& )
             {
                 error_callback();
             }
