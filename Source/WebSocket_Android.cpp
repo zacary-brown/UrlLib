@@ -2,15 +2,10 @@
 
 #include <arcana/threading/task_conversions.h>
 
-#include <websocketpp/client.hpp>
-#include <websocketpp/config/asio_no_tls_client.hpp>
-
 #include <iostream>
 
 namespace UrlLib
 {
-
-    typedef websocketpp::client<websocketpp::config::asio_client> client;
 
     class WebSocket::WSImpl : public WSImplBase
     {
