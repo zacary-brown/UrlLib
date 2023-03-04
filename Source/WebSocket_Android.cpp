@@ -1,6 +1,6 @@
 #include "WebSocket_Base.h"
 
-#include <arcana/threading/task_conversions.h>
+//#include <arcana/threading/task_conversions.h>
 
 #include <websocketpp/client.hpp>
 
