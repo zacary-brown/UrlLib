@@ -52,6 +52,7 @@ if(ANDROID)
     set(ADDITIONAL_LIBRARIES
         PRIVATE android
         PRIVATE AndroidExtensions
+        PRIVATE websocketpp
         PRIVATE log)
 elseif(APPLE)
     set(ADDITIONAL_SOURCES
@@ -89,7 +90,7 @@ add_library(UrlLib ${SOURCES})
 target_include_directories(UrlLib PUBLIC "Include")
 target_include_directories(UrlLib PRIVATE "Source")
 
-include_directories(${websocketpp_SOURCE_DIR})
+#include_directories(${websocketpp_SOURCE_DIR})
 
 target_link_libraries(UrlLib
     PUBLIC arcana
