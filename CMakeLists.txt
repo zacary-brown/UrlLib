@@ -33,18 +33,6 @@ if(ANDROID AND NOT TARGET AndroidExtensions)
     message(STATUS "Fetching AndroidExtensions - done")
 endif()
 
-if(NOT websocketpp_POPULATED)
-
-    FetchContent_Declare(
-        websocketpp
-        GIT_REPOSITORY https://github.com/zaphoyd/websocketpp.git
-        GIT_TAG        origin/master)
-
-    message(STATUS "Fetching WebSocket++")
-    FetchContent_MakeAvailable(websocketpp)
-    message(STATUS "Fetching WebSocket++ - done")
-endif()
-
 if(ANDROID)
     set(ADDITIONAL_SOURCES
         "Source/UrlRequest_Android.cpp"
@@ -52,7 +40,6 @@ if(ANDROID)
     set(ADDITIONAL_LIBRARIES
         PRIVATE android
         PRIVATE AndroidExtensions
-        PRIVATE websocketpp
         PRIVATE log)
 elseif(APPLE)
     set(ADDITIONAL_SOURCES
@@ -89,8 +76,6 @@ add_library(UrlLib ${SOURCES})
 
 target_include_directories(UrlLib PUBLIC "Include")
 target_include_directories(UrlLib PRIVATE "Source")
-
-#include_directories(${websocketpp_SOURCE_DIR})
 
 target_link_libraries(UrlLib
     PUBLIC arcana
