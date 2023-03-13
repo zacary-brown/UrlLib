@@ -62,21 +62,6 @@ namespace UrlLib
         return m_impl->SendAsync();
     }
 
-    void UrlRequest::SetRequestBody(std::string requestBody)
-    {
-        m_impl->SetRequestBody(requestBody);
-    }
-
-    void UrlRequest::SetRequestHeader(std::string key, std::string value)
-    {
-        m_impl->SetRequestHeader(key, value);
-    }
-
-    arcana::task<void, std::exception_ptr> UrlRequest::SendAsync()
-    {
-        return m_impl->SendAsync();
-    }
-
     UrlStatusCode UrlRequest::StatusCode() const
     {
         return m_impl->StatusCode();

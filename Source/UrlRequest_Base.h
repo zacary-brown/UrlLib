@@ -91,5 +91,7 @@ namespace UrlLib
         std::string m_responseUrl{};
         std::string m_responseString{};
         std::unordered_map<std::string, std::string> m_headers;
+        std::string m_requestBody{};
+        std::unordered_map<std::string, std::string> m_requestHeaders;
     };
 }
